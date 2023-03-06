@@ -9,9 +9,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode
 @Builder
 @ToString
+@Getter
+@Setter
 public class RegisterRequest {
 
 
