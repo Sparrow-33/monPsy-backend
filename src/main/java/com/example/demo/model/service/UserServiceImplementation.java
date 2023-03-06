@@ -1,9 +1,9 @@
-package com.example.demo.service;
+package com.example.demo.model.service;
 
-import com.example.demo.entities.AppUser;
-import com.example.demo.entities.Role;
-import com.example.demo.repo.RoleRepo;
-import com.example.demo.repo.UserRepo;
+import com.example.demo.model.entities.AppUser;
+import com.example.demo.model.entities.Role;
+import com.example.demo.model.repo.RoleRepo;
+import com.example.demo.model.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

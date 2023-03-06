@@ -1,7 +1,7 @@
 package com.example.demo.config;
 
-import com.example.demo.dao.UserDao;
-import com.example.demo.service.UserService;
+import com.example.demo.model.dao.UserDao;
+import com.example.demo.model.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +23,6 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private final UserDao userDao;
     private final JwtUtil jwtUtil;
     private final UserService userService;
     private final UserDetailsService userDetailsService;

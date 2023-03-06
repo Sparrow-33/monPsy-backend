@@ -1,11 +1,9 @@
-package com.example.demo.entities;
+package com.example.demo.model.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -14,6 +12,7 @@ import java.util.Collection;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 
 public class AppUser {
     @Id
@@ -24,6 +23,9 @@ public class AppUser {
     private String email;
     private String username;
     private String password;
+    private Boolean isEnabled = false;
+    private LocalDateTime created_at;
+    private LocalDateTime updated_at;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles = new ArrayList<>();

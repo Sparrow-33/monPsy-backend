@@ -1,9 +1,8 @@
 package com.example.demo.config;
 
-import com.example.demo.dao.UserDao;
-import com.example.demo.entities.AppUser;
-import com.example.demo.service.UserService;
-import lombok.RequiredArgsConstructor;
+import com.example.demo.model.dao.UserDao;
+import com.example.demo.model.entities.AppUser;
+import com.example.demo.model.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,20 +34,17 @@ import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 
 public class SecurityConfig  {
     private final JwtAuthFilter jwtAuthFilter;
-    private final UserDao userDao;
     private final UserService userService;
 
-//    @Autowired
-//    @Lazy
-//    public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserDao userDao, UserService userService) {
-//        this.jwtAuthFilter = jwtAuthFilter;
-//        this.userDao = userDao;
-//        this.userService = userService;
-//    }
+    @Autowired
+    @Lazy
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserService userService) {
+        this.jwtAuthFilter = jwtAuthFilter;
+        this.userService = userService;
+    }
 
 
     @Bean

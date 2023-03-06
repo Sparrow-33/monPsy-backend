@@ -1,8 +1,8 @@
 package com.example.demo.api;
 
-import com.example.demo.entities.AppUser;
-import com.example.demo.entities.Role;
-import com.example.demo.service.UserService;
+import com.example.demo.model.entities.AppUser;
+import com.example.demo.model.entities.Role;
+import com.example.demo.model.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpRequest;

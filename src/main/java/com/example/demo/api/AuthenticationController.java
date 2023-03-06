@@ -1,7 +1,8 @@
 package com.example.demo.api;
 
 import com.example.demo.config.JwtUtil;
-import com.example.demo.dto.AuthenticationRequest;
+import com.example.demo.model.dto.AuthenticationRequest;
+import com.example.demo.model.dto.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,5 +36,11 @@ public class AuthenticationController {
             return ResponseEntity.ok(jwtUtil.generateToken(user));
         }
         return ResponseEntity.status(400).body("error occurred");
+    }
+
+    @PostMapping("/register")
+    public String register(@RequestBody RegisterRequest registerRequest) {
+
+        return null;
     }
 }

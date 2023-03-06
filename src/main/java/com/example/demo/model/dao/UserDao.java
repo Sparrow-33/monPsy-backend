@@ -7,19 +7,18 @@
 
 
 
-package com.example.demo.dao;
+package com.example.demo.model.dao;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Repository;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-@Repository
+//@Repository
 public class UserDao {
     private final static List<UserDetails> APPLICATION_USERS = Arrays.asList(
             new User(
