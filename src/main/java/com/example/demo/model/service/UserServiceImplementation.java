@@ -1,6 +1,7 @@
 package com.example.demo.model.service;
 
 import com.example.demo.model.entities.AppUser;
+import com.example.demo.model.entities.ConfirmationToken;
 import com.example.demo.model.entities.Role;
 import com.example.demo.model.repo.RoleRepo;
 import com.example.demo.model.repo.UserRepo;
@@ -10,8 +11,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +24,7 @@ public class UserServiceImplementation implements UserService{
 
     private final RoleRepo roleRepo;
     private final UserRepo userRepo;
+    private final ConfirmationTokenService tokenService;
 
     @Override
     public AppUser saveUser(AppUser user) {
@@ -60,7 +64,7 @@ public class UserServiceImplementation implements UserService{
     }
 
     @Override
-    public void signUp(AppUser user, String role) {
+    public String signUp(AppUser user, String role) {
         Optional<AppUser> optionalAppUser = userRepo.findAppUserByEmail(user.getEmail());
         if ( optionalAppUser.isPresent()) {
             throw new IllegalStateException("email already taken");
@@ -69,7 +73,21 @@ public class UserServiceImplementation implements UserService{
         user = userRepo.save(user);
         addRoleToUser(user.getId(), role);
         log.info("created user  with role");
+
+//        confirm token generate
+        String token = UUID.randomUUID().toString();
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+          token,
+          LocalDateTime.now(),
+          LocalDateTime.now().plusMinutes(15),
+          user
+        );
+        tokenService.saveConfirmationToken(confirmationToken);
+        return token;
     }
 
+    public int enableAppUser(String email) {
+        return userRepo.enableAppUser(email);
+    }
 
 }

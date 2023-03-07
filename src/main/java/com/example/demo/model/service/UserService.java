@@ -12,6 +12,6 @@ public interface UserService {
     AppUser getUser(String username);
     List<AppUser> getUsers();
     AppUser findUserByEmail(String email);
-    void signUp(AppUser user, String role);
+    String signUp(AppUser user, String role);
 
 }
