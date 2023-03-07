@@ -17,29 +17,29 @@ public class MonPsyApplication {
     public static void main(String[] args) {
         SpringApplication.run(MonPsyApplication.class, args);
     }
-    @Bean
-    CommandLineRunner runner(UserService userService) {
-        return args -> {
-//            userService.saveRole(new Role(null, "PATIENT"));
-//            userService.saveRole(new Role(null, "DOCTOR"));
-//            userService.saveRole(new Role(null, "ADMIN"));
-//            userService.saveRole(new Role(null, "SECRETARY"));
-
-//            userService.saveUser
-//                    (new AppUser(null, "admin","admin@monpsy", "user1UserName", new BCryptPasswordEncoder().encode("123456"), new ArrayList<>()));
-
-            userService.saveUser(
-                     AppUser.
-                     builder().name("adminName")
-                             .username("admin")
-                             .email("admin@monpsy.ma").password(new BCryptPasswordEncoder().encode("123456"))
-                             .roles(new ArrayList<>())
-                             .isEnabled(false)
-                    .build()
-            );
+//    @Bean
+//    CommandLineRunner runner(UserService userService) {
+//        return args -> {
+////            userService.saveRole(new Role(null, "PATIENT"));
+////            userService.saveRole(new Role(null, "DOCTOR"));
+////            userService.saveRole(new Role(null, "ADMIN"));
+////            userService.saveRole(new Role(null, "SECRETARY"));
 //
-            userService.addRoleToUser("admin", "ADMIN");
-
-        };
-    }
+////            userService.saveUser
+////                    (new AppUser(null, "admin","admin@monpsy", "user1UserName", new BCryptPasswordEncoder().encode("123456"), new ArrayList<>()));
+//
+//            userService.saveUser(
+//                     AppUser.
+//                     builder().name("adminName")
+//                             .username("admin")
+//                             .email("admin@monpsy.ma").password(new BCryptPasswordEncoder().encode("123456"))
+//                             .roles(new ArrayList<>())
+//                             .isEnabled(false)
+//                    .build()
+//            );
+////
+//            userService.addRoleToUser("admin", "ADMIN");
+//
+//        };
+//    }
 }

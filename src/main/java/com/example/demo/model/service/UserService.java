@@ -8,11 +8,10 @@ import java.util.List;
 public interface UserService {
     AppUser saveUser(AppUser user);
     Role saveRole(Role role);
-    void addRoleToUser(String username, String roleName);
+    void addRoleToUser(long id, String roleName);
     AppUser getUser(String username);
     List<AppUser> getUsers();
-
-
     AppUser findUserByEmail(String email);
+    void signUp(AppUser user, String role);
 
 }

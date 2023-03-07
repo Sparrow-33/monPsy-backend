@@ -6,10 +6,12 @@ import com.example.demo.model.repo.RoleRepo;
 import com.example.demo.model.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,9 +35,9 @@ public class UserServiceImplementation implements UserService{
     }
 
     @Override
-    public void addRoleToUser(String username, String roleName) {
+    public void addRoleToUser(long id, String roleName) {
         log.info("adding role to a  user");
-        AppUser appUser = userRepo.findByUsername(username);
+        AppUser appUser = userRepo.findAppUserById(id);
         Role role = roleRepo.findByName(roleName);
         appUser.getRoles().add(role);
     }
@@ -52,12 +54,22 @@ public class UserServiceImplementation implements UserService{
         return userRepo.findAll();
     }
 
-    @Override
+
     public AppUser findUserByEmail(String email) {
-        return userRepo.findAppUserByEmail(email);
+        return userRepo.getAppUserByEmail(email);
     }
 
-
+    @Override
+    public void signUp(AppUser user, String role) {
+        Optional<AppUser> optionalAppUser = userRepo.findAppUserByEmail(user.getEmail());
+        if ( optionalAppUser.isPresent()) {
+            throw new IllegalStateException("email already taken");
+        }
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        user = userRepo.save(user);
+        addRoleToUser(user.getId(), role);
+        log.info("created user  with role");
+    }
 
 
 }

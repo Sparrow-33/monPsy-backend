@@ -16,8 +16,6 @@ import java.util.Collection;
 @Getter
 @Setter
 public class RegisterRequest {
-
-
     @NotNull
     private String name;
     @NotNull

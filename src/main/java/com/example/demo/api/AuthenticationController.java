@@ -3,6 +3,7 @@ package com.example.demo.api;
 import com.example.demo.config.JwtUtil;
 import com.example.demo.model.dto.AuthenticationRequest;
 import com.example.demo.model.dto.RegisterRequest;
+import com.example.demo.model.service.RegisterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +23,7 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
+    private final RegisterService registerService;
 
     @PostMapping("/authenticate")
     public ResponseEntity<String>authenticate( @RequestBody AuthenticationRequest request) {
@@ -40,7 +42,6 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public String register(@RequestBody RegisterRequest registerRequest) {
-
-        return null;
+        return registerService.register(registerRequest);
     }
 }
