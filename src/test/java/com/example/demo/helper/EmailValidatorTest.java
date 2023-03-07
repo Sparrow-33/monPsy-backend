@@ -1,5 +1,6 @@
 package com.example.demo.helper;
 
+import com.example.demo.helper.email.EmailValidator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

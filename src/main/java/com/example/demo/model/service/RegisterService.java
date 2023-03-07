@@ -1,12 +1,12 @@
 package com.example.demo.model.service;
 
-import com.example.demo.helper.EmailValidator;
+import com.example.demo.helper.email.EmailSender;
+import com.example.demo.helper.email.EmailValidator;
 import com.example.demo.model.dto.RegisterRequest;
 import com.example.demo.model.entities.AppUser;
 import com.example.demo.model.entities.ConfirmationToken;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.metamodel.mapping.ModelPart;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +21,22 @@ public class RegisterService {
     private UserServiceImplementation userService;
     private  ConfirmationTokenService confirmationTokenService;
     private final UserServiceImplementation userServiceImplementation;
-    public String register(RegisterRequest request) {
+    private final EmailSender emailSender;
 
+    public String register(RegisterRequest request) {
+         String CONFIRMATION_LINK = "http:\\localhost:8080/api/auth/confirm?token=";
         if (!emailValidator.test(request.getEmail())) {
             throw new IllegalStateException("email not valid");
         }
         AppUser user = mapper.map(request, AppUser.class);
         log.info("NEW USER REGISTERED");
-       return userService.signUp(user, "PATIENT");
+       String token = userService.signUp(user, "PATIENT");
+       emailSender.send(request.getEmail(), emailSender.buildEmail(request.getUsername(),CONFIRMATION_LINK+token) );
+       return token;
     }
 
     public String confirmToken(String token) {
+
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token)
                 .orElseThrow( () ->
