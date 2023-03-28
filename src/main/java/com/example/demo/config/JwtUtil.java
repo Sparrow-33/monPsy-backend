@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -39,6 +40,7 @@ public class JwtUtil {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("role",userDetails.getAuthorities());
         return createToken(claims, userDetails.getUsername());
     }
 
@@ -53,5 +55,11 @@ public class JwtUtil {
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    public String extractRole(String token) {
+        final Claims claims = extractAllClaims(token);
+        List<Map<String, String>> roles = (List<Map<String, String>>) claims.get("role");
+        return roles.get(0).get("authority");
     }
 }

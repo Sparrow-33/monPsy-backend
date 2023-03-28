@@ -5,11 +5,13 @@ import com.example.demo.helper.email.EmailValidator;
 import com.example.demo.model.dto.RegisterRequest;
 import com.example.demo.model.entities.AppUser;
 import com.example.demo.model.entities.ConfirmationToken;
+import com.example.demo.model.entities.Doctor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.print.Doc;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -24,7 +26,7 @@ public class RegisterService {
     private final EmailSender emailSender;
 
     public String register(RegisterRequest request) {
-         String CONFIRMATION_LINK = "http:\\localhost:8080/api/auth/confirm?token=";
+         String CONFIRMATION_LINK = "http://localhost:8080/api/auth/confirm?token=";
         if (!emailValidator.test(request.getEmail())) {
             throw new IllegalStateException("email not valid");
         }
@@ -34,6 +36,18 @@ public class RegisterService {
        emailSender.send(request.getEmail(), emailSender.buildEmail(request.getUsername(),CONFIRMATION_LINK+token) );
        return token;
     }
+
+//    public String Doctorregister(RegisterRequest request) {
+//        String CONFIRMATION_LINK = "http://localhost:8080/api/auth/confirm?token=";
+//        if (!emailValidator.test(request.getEmail())) {
+//            throw new IllegalStateException("email not valid");
+//        }
+//        Doctor user = mapper.map(request, Doctor.class);
+//        log.info("NEW USER REGISTERED");
+//        String token = userService.signUp(user, "PATIENT");
+//        emailSender.send(request.getEmail(), emailSender.buildEmail(request.getUsername(),CONFIRMATION_LINK+token) );
+//        return token;
+//    }
 
     public String confirmToken(String token) {
 

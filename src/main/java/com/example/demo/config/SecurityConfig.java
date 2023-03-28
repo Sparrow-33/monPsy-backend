@@ -1,7 +1,13 @@
 package com.example.demo.config;
 
+import com.example.demo.config.usersDetails.CustomAuthenticationProvider;
+import com.example.demo.config.usersDetails.DoctorDetailsService;
+import com.example.demo.config.usersDetails.PatientDetailsService;
+import com.example.demo.exception.InvalidCredentialsException;
 import com.example.demo.model.dao.UserDao;
 import com.example.demo.model.entities.AppUser;
+import com.example.demo.model.entities.Doctor;
+import com.example.demo.model.repo.DoctorRepo;
 import com.example.demo.model.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +17,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -29,8 +36,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 
+import javax.print.Doc;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -38,12 +48,23 @@ import java.util.Collections;
 public class SecurityConfig  {
     private final JwtAuthFilter jwtAuthFilter;
     private final UserService userService;
+    private final PatientDetailsService patientDetailsService;
+    private final DoctorDetailsService doctorDetailsService;
+    private final DoctorRepo doctorRepo;
 
     @Autowired
     @Lazy
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserService userService) {
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter,
+                          UserService userService,
+                          DoctorDetailsService doctorDetailsService,
+                          PatientDetailsService patientDetailsService,
+                          DoctorRepo doctorRepo) {
+
         this.jwtAuthFilter = jwtAuthFilter;
         this.userService = userService;
+        this.doctorDetailsService = doctorDetailsService;
+        this.patientDetailsService = patientDetailsService;
+        this.doctorRepo = doctorRepo;
     }
 
 
@@ -92,7 +113,6 @@ public class SecurityConfig  {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-//        return NoOpPasswordEncoder.getInstance();
     }
 
     @Bean
@@ -100,8 +120,26 @@ public class SecurityConfig  {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-                AppUser user = userService.findUserByEmail(email);
-                return new User(user.getEmail(), user.getPassword(), Collections.singleton(new SimpleGrantedAuthority("user")));
+                if (email.endsWith("-PATIENT")) {
+                    String emailOnly = email.substring(0, email.length() - 8);
+                    AppUser user = userService.findUserByEmail(emailOnly);
+                    if (user == null) {
+                        throw new InvalidCredentialsException("invalid credentials");
+                    }
+                    return new User(user.getEmail(), user.getPassword(), Collections.singleton(new SimpleGrantedAuthority("PATIENT")));
+
+                } else if (email.endsWith("-DOCTOR"))  {
+                    String emailOnly = email.substring(0, email.length() - 7);
+                    System.out.println(emailOnly);
+                    Doctor user = doctorRepo.getDoctorByEmail(emailOnly);
+                    if (user == null) {
+                        throw new InvalidCredentialsException("invalid credentials");
+                    }
+
+                    return new User(user.getEmail(), user.getPassword(), Collections.singleton(new SimpleGrantedAuthority("DOCTOR")));
+                }
+
+                throw new InvalidCredentialsException("invalid credentials");
 
             }
         };
