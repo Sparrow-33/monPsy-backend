@@ -10,10 +10,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @Value(value = "Invalid credentials")
-    private String message1;
+    private String userNotFound;
+
+    @Value(value = "Wrong appointment submitted data")
+    private String appointmentErr;
 
     @ExceptionHandler(value = InvalidCredentialsException.class)
     public ResponseEntity UserNotFoundException(InvalidCredentialsException invalidCredentialsException) {
-        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message1);
+        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userNotFound);
+    }
+
+    @ExceptionHandler(value = InvalidAppointmentSubmit.class)
+    public ResponseEntity InvalidAppointmentSubmitException (InvalidAppointmentSubmit invalidAppointmentSubmit) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(appointmentErr);
     }
 }

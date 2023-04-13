@@ -1,5 +1,6 @@
 package com.example.demo.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -17,12 +18,15 @@ import java.time.LocalTime;
 @Setter
 public class AppointmentRequest {
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING,  pattern = "HH:mm:ss")
     private LocalTime startTime;
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING,  pattern = "HH:mm:ss")
     private LocalTime endTime;
     @JsonIgnore
     private boolean isReserved = false;
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
     @JsonIgnore
     private LocalDateTime created_at = LocalDateTime.now();

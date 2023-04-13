@@ -20,7 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class UserServiceImplementation implements UserService{
+public class UserServiceImplementation implements UserService {
 
     private final RoleRepo roleRepo;
     private final UserRepo userRepo;

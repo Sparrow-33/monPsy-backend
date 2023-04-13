@@ -33,6 +33,10 @@ public class DoctorServiceImp implements DoctorService{
         return doctor.findDoctorByFamilyName(name);
     }
 
+    public Long getDoctorIdFromEmail(String email) {
+        return doctor.getDoctorByEmail(email).getId();
+    }
+
     @Override
     public List<Doctor> getDoctors() {
         return doctor.findAll();
